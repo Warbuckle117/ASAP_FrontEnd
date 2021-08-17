@@ -1,25 +1,46 @@
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import { Switch, Route } from 'react-router-dom';
+import StatusForm from './components/StatusForm';
+import StatusList from './components/StatusList';
+import DataHandler from './components/DataHandler';
 import './App.css';
 
-function App() {
+const App = () => {
+  const [statusData, setStatusData] = useState([])
+  const [aircraftData, setAircraftData] = useState([])
+  const [baseData, setBaseData] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+  //-1 on current status item means no data is loaded to edit form
+  const [currentStatusItem, setCurrentStatusItem] = useState(-1)
+
+  //useEffect for aircraft and bases
+  useEffect(() => {
+    setIsLoading(true);
+    const dataHandler = new DataHandler();
+    dataHandler.getAircraft().then((data) => setAircraftData(data)).then(() => setIsLoading(false));
+    dataHandler.getBases().then((data) => setBaseData(data)).then(() => setIsLoading(false));
+  }, [])
+
+  //useEffect for status list depends on currentStatusItem
+  useEffect(() => {
+    setIsLoading(true);
+    const dataHandler = new DataHandler();
+    dataHandler.getStatus().then((data) => setStatusData(data)).then(() => setIsLoading(false));
+  }, [currentStatusItem])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <h2>A.S.A.P.</h2><br/>
+      <h3>Aircraft Status And Position</h3>
+      <StatusForm currentStatusItem={currentStatusItem} statusData={statusData} aircraftData={aircraftData} baseData={baseData} setItemCallback={(item) => setCurrentStatusItem(item)} />
+      <Switch >
+        <Route exact path='/' >
+          <StatusList statusData={statusData} aircraftData={aircraftData} baseData={baseData} setItemCallback={(item) => setCurrentStatusItem(item)}/>
+        </Route>
+      </Switch>
+
     </div>
   );
-}
+};
 
 export default App;
