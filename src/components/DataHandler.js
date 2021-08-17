@@ -229,7 +229,7 @@ class DataHandler {
       },
       {
         status_id: 2,
-        status_tail_numbers: 15000202,
+        status_tail_number: 15000202,
         aircraft_id: 2,
           aircraft_name: "F-16",
         base_id: 1,
@@ -253,7 +253,7 @@ class DataHandler {
       },
       {
         status_id: 4,
-        status_tail_numbers: 15000404,
+        status_tail_number: 15000404,
         aircraft_id: 3,
           aircraft_name: "KC-135",
         base_id: 3,

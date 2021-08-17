@@ -28,14 +28,14 @@ const App = () => {
     dataHandler.getStatus().then((data) => setStatusData(data)).then(() => setIsLoading(false));
   }, [currentStatusItem])
 
-
   return (
     <div className='App'>
-      App Space holder
-      <StatusForm statusData={statusData} aircraftData={aircraftData} baseData={baseData} />
+      <h2>A.S.A.P.</h2><br/>
+      <h3>Aircraft Status And Position</h3>
+      <StatusForm currentStatusItem={currentStatusItem} statusData={statusData} aircraftData={aircraftData} baseData={baseData} setItemCallback={(item) => setCurrentStatusItem(item)} />
       <Switch >
         <Route exact path='/' >
-          <StatusList statusData={statusData} aircraftData={aircraftData} baseData={baseData}/>
+          <StatusList statusData={statusData} aircraftData={aircraftData} baseData={baseData} setItemCallback={(item) => setCurrentStatusItem(item)}/>
         </Route>
       </Switch>
 
