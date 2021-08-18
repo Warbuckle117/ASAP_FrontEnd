@@ -185,70 +185,78 @@ const StatusForm = (props) => {
   }, [props.currentStatusItem])
 
   return (
-
-    <div>
-      {responseData ? <div>{JSON.stringify(responseData)}</div> : <div></div>}
-      <form onSubmit={handleSubmit}>
-	      <input  type="text"
-                name="tailNumber"
-                id="tailNumber"
-                value={tailNumber}
-                onChange={tailNumberChange}
-                placeholder="Tail Number"
-        />
-        <select name = "aircraftName"
-                value={aircraftID}
-                onChange={aircraftNameChange}>
-            <option value = "" selected></option>
-            {props.aircraftData && props.aircraftData.map((aircraft) => {
-              return <option value={aircraft.aircraft_id}>{`${aircraft.aircraft_name}`}</option>
-            })}
-         </select>
-        <select name = "baseName"
-                value={baseID}
-                onChange={baseChange}>
-            <option value = "" selected></option>
-            {props.baseData && props.baseData.map((_base) => {
-              return <option value={_base.base_id}>{`${_base.base_name}`}</option>
-            })}
-         </select>
-        <select name = "flyable"
-                value={FLYABLE_BOOL(flyable)}
-                onChange={flyableChange}>
-            <option value = "" selected></option>
-            <option value = "Flyable">Flyable</option>
-            <option value = "Non-Flyable">Non-Flyable</option>
-         </select>
-        <input  type="text"
-                name="description"
-                id="description"
-                value={description}
-                onChange={descriptionChange}
-                placeholder="Description"
-        />
-        <select name = "priority"
-                value={PRIORITY_LIST_NUM[priority]}
-                onChange={priorityChange}>
-            <option value = "" selected></option>
-            <option value = "High">High</option>
-            <option value = "Medium">Medium</option>
-            <option value = "Low">Low</option>
-         </select>
-	      <input  type="submit"
-                name="submit"
-                id="submit"
-        />
-      </form>
-      <button onClick={handleModifyForm}>
-        Modify
-      </button>
-      <button onClick={handleDeleteForm}>
-        Delete
-      </button>
-      <button onClick={handleClearForm}>
-        Clear
-      </button>
+<div className="card col">
+  <div className="card-header row">
+          <div className="col">
+            <h5>Input Form</h5>
+          </div>
+        </div>
+  <div className="row">
+    <div className="col">
+    {responseData ? <div>{JSON.stringify(responseData)}</div> : <div></div>}
     </div>
+  </div>
+  <div className="row">
+    <div className="col">
+    <label className="form-label">Tail Number</label>
+    <input className="form-control" type="text" name="tailNumber" id="tailNumber" value={tailNumber} onChange={tailNumberChange} placeholder="Tail Number" />
+    </div>
+    <div className="col">
+    <label className="form-label">Aircraft Type</label>
+    <select className="form-select" name="aircraftName" value={aircraftID} onChange={aircraftNameChange}>
+      <option value="" selected></option>
+      {props.aircraftData &&
+        props.aircraftData.map((aircraft) => {
+          return <option value={aircraft.aircraft_id}>{`${aircraft.aircraft_name}`}</option>;
+        })}
+    </select>
+    </div>
+  </div>
+  <div className="row">
+    <div className="col">
+    <label className="form-label">Current Position</label>
+    <select className="form-select" name="baseName" value={baseID} onChange={baseChange}>
+      <option value="" selected></option>
+      {props.baseData &&
+        props.baseData.map((_base) => {
+          return <option value={_base.base_id}>{`${_base.base_name}`}</option>;
+        })}
+    </select>
+
+    </div>
+    </div>
+  <div className="row">
+    <div className="col">
+    <label className="form-label">Maintenance Status</label>
+    <select className="form-select" name="flyable" value={FLYABLE_BOOL(flyable)} onChange={flyableChange}>
+      <option value="" selected></option>
+      <option value="Flyable">Flyable</option>
+      <option value="Non-Flyable">Non-Flyable</option>
+    </select>
+    </div>
+    <div className="col">
+    <label className="form-label">Maintenance Priority</label>
+    <select className="form-select" name="priority" value={PRIORITY_LIST_NUM[priority]} onChange={priorityChange}>
+      <option value="" selected></option>
+      <option value="High">High</option>
+      <option value="Medium">Medium</option>
+      <option value="Low">Low</option>
+    </select>
+    </div>
+  </div>
+  <div className="row">
+    <div className="col">
+    <label className="form-label">Maintenance Description</label>
+    <input className="form-control" type="text" name="description" id="description" value={description} onChange={descriptionChange} placeholder="Description" />
+    </div>
+  </div>
+  <div className="row m-1">
+    <div className="col"><button className="btn btn-primary" onClick={handleSubmit}>Submit</button></div>
+    <div className="col"><button className="btn btn-warning" onClick={handleModifyForm}>Modify</button></div>
+    <div className="col"><button className="btn btn-danger" onClick={handleDeleteForm}>Delete</button></div>
+    <div className="col"><button className="btn btn-info" onClick={handleClearForm}>Clear</button></div>
+  </div>
+</div>
   )
 }
 

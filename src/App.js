@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import StatusForm from './components/StatusForm';
 import StatusList from './components/StatusList';
 import DataHandler from './components/DataHandler';
+import asap from './asap.png';
 import './App.css';
 
 const App = () => {
@@ -30,17 +31,26 @@ const App = () => {
   }, [currentStatusItem])
 
   return (
-    <div className='App'>
-      <h2>A.S.A.P.</h2><br/>
-      <h3>Aircraft Status And Position</h3>
-      <StatusForm currentStatusItem={currentStatusItem} currentArrayItem={currentArrayItem} statusData={statusData} aircraftData={aircraftData} baseData={baseData} setItemCallback={(item) => setCurrentStatusItem(item)} />
-      <Switch >
-        <Route exact path='/' >
-          <StatusList statusData={statusData} aircraftData={aircraftData} baseData={baseData} setItemCallback={(item) => setCurrentStatusItem(item)} setArrayItemCallback={(item) => setCurrentArrayItem(item)}/>
-        </Route>
-      </Switch>r
+    <main className='container'>
+      <section className='row justify-content-center'>
+        <div className='col-8 text-center'>
+          <img src={asap} className="img-fluid" alt='ASAP'/>
+          <h1>Aircraft Status And Position</h1>
+        </div>
+      </section>
+      <section className='row'>
+          <StatusForm currentStatusItem={currentStatusItem} currentArrayItem={currentArrayItem} statusData={statusData} aircraftData={aircraftData} baseData={baseData} setItemCallback={(item) => setCurrentStatusItem(item)} />
+      </section>
+      <section className='row'>
+        <Switch >
+          <Route exact path='/' >
+            <StatusList statusData={statusData} aircraftData={aircraftData} baseData={baseData} setItemCallback={(item) => setCurrentStatusItem(item)} setArrayItemCallback={(item) => setCurrentArrayItem(item)}/>
+          </Route>
+        </Switch>
+      </section>
 
-    </div>
+
+    </main>
   );
 };
 
