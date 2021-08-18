@@ -9,9 +9,14 @@ deleteStatus()*/
 import Cookies from 'js-cookie'
 
 class DataHandler {
-  constructor(use_mock_data = true) {
-    this.use_mock_data = use_mock_data;
-    if (use_mock_data) {
+  constructor() {
+    this.use_mock_data = true
+    if (process.env.REACT_APP_MOCKAPIMODE === 'production') {
+      this.use_mock_data=false
+    }
+    this.apiBase = process.env.REACT_APP_APIURL
+
+    if (this.use_mock_data) {
       const rawMockData = Cookies.get('mock_data')
       if (rawMockData) {
         const mockData = JSON.parse(rawMockData)
@@ -27,22 +32,44 @@ class DataHandler {
     return this.promiseInput(Cookies.set('mock_data', JSON.stringify(mockData), {expires: 1}))
   }
 
-  async getAircraft() { // returns a an array of objects containing aircraft type data
-    return this.use_mock_data
-      ? this.promiseInput(this.getMockAircraftData())
-      : "real fetch aircraft call";
+  async getAircraft() {
+     // returns a an array of objects containing aircraft type data
+     if (!this.use_mock_data) {
+        return this.promiseInput(this.getMockAircraftData())
+     } else {
+      try {
+        const response = await fetch(`${this.apiBase}/aircraft`)
+        return await response.json()
+      } catch (error) {
+        console.log('Request failed', error)
+      }
+     }
   }
 
   async getBases() { // returns an array of objects containing bases data
-    return this.use_mock_data
-      ? this.promiseInput(this.getMockBaseData())
-      : "real fetch bases call";
+      if (!this.use_mock_data) {
+        return this.promiseInput(this.getMockBaseData())
+     } else {
+      try {
+        const response = await fetch(`${this.apiBase}/base`)
+        return await response.json()
+      } catch (error) {
+        console.log('Request failed', error)
+      }
+     }
   }
 
   async getStatus() { // returns an array of objects containing status data for all loaded tail numbers
-    return this.use_mock_data
-      ? this.promiseInput(this.status_mock_data)
-      : "real fetch status call";
+      if (!this.use_mock_data) {
+        return this.promiseInput(this.status_mock_data)
+     } else {
+      try {
+        const response = await fetch(`${this.apiBase}/status`)
+        return await response.json()
+      } catch (error) {
+        console.log('Request failed', error)
+      }
+     }
   }
 
   async postStatus (new_status_data) { //should create a new and unique tail number with user specified status data and add it to the status list
@@ -52,7 +79,7 @@ class DataHandler {
     if(this.verifyNewStatusData(new_status_data) && !this.findRecordByTail(new_status_data.status_tail_number)) {
       console.log('inside postStatus 2')
       // add the new_status_data to status list
-      if(this.use_mock_data){
+      if(!this.use_mock_data){
         let currentID = this.status_mock_data[this.status_mock_data.length-1].status_id
         const post_status_data = Object.assign({}, new_status_data);
         post_status_data['status_id'] = currentID++;
@@ -60,7 +87,22 @@ class DataHandler {
         await this.updateMockDataCookie(this.status_mock_data)
         return this.promiseInput(post_status_data);
       } else {
-        return "REAL POST REQUEST";
+        const post_status_data = Object.assign({}, new_status_data);
+        try {
+          const response = await fetch(`${this.apiBase}/status`, {
+            method: 'post',
+            credentials: 'omit', // include, *same-origin, omit
+            headers: {
+              'Content-Type': 'application/json'
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            mode: 'cors',
+            body: JSON.stringify(post_status_data)
+          })
+          return await response.json()
+        } catch (error) {
+          console.log('Request failed', JSON.stringify(error))
+        }
       }
 
     } else {
@@ -83,7 +125,7 @@ class DataHandler {
     {
       // update the record in status list
       console.log('inside editStatus 2')
-      if(this.use_mock_data){
+      if(!this.use_mock_data){
         const edit_status_data = Object.assign({}, new_status_data);
         edit_status_data['status_id'] = status_id;
         let recordID = this.findRecordByID(status_id)
@@ -91,8 +133,22 @@ class DataHandler {
         await this.updateMockDataCookie(this.status_mock_data)
         return this.promiseInput(this.status_mock_data[this.findRecordByID(status_id)]);
       } else {
-        return "REAL EDIT REQUEST";
-        //patch /status/:statusid
+        const edit_status_data = Object.assign({}, new_status_data);
+        try {
+          const response = await fetch(`${this.apiBase}/status/${status_id}`, {
+            method: 'patch',
+            credentials: 'omit', // include, *same-origin, omit
+            headers: {
+              'Content-Type': 'application/json'
+              // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            mode: 'cors',
+            body: JSON.stringify(edit_status_data)
+          })
+          return await response.json()
+        } catch (error) {
+          console.log('Request failed', JSON.stringify(error))
+        }
       }
     }
     throw new Error('Failed to edit record or record not found');
