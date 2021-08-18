@@ -120,7 +120,13 @@ const StatusForm = (props) => {
   };
 
   const handleDeleteForm = () => {
-
+    const dataHandler = new DataHandler();
+    try {
+      dataHandler.deleteStatus(statusID).then((data) => setResponseData(data));
+    } catch (error) {
+      console.error(error);
+    }
+    props.setItemCallback(-1)
   };
 
   const handleSubmit = (event) => {
