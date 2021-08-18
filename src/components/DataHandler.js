@@ -6,11 +6,25 @@ getStatus()
 postStatus()
 editStatus()
 deleteStatus()*/
+import Cookies from 'js-cookie'
 
 class DataHandler {
   constructor(use_mock_data = true) {
     this.use_mock_data = use_mock_data;
-    this.status_mock_data = this.getMockStatusData();
+    if (use_mock_data) {
+      const rawMockData = Cookies.get('mock_data')
+      if (rawMockData) {
+        const mockData = JSON.parse(rawMockData)
+        this.status_mock_data = mockData;
+      } else {
+        this.status_mock_data = this.getMockStatusData();
+        this.updateMockDataCookie(this.status_mock_data)
+      }
+    }
+  }
+
+  async updateMockDataCookie(mockData) {
+    return this.promiseInput(Cookies.set('mock_data', JSON.stringify(mockData), {expires: 1}))
   }
 
   async getAircraft() { // returns a an array of objects containing aircraft type data
@@ -34,18 +48,23 @@ class DataHandler {
   async postStatus (new_status_data) { //should create a new and unique tail number with user specified status data and add it to the status list
     // verify that the new_status_data contains valid data
     // verify that no record with a matching tail number exists in the status list
+    console.log('inside postStatus 1')
     if(this.verifyNewStatusData(new_status_data) && !this.findRecordByTail(new_status_data.status_tail_number)) {
+      console.log('inside postStatus 2')
         // add the new_status_data to status list
         if(this.use_mock_data){
             let currentID = this.status_mock_data[this.status_mock_data.length-1].status_id
             const post_status_data = Object.assign({}, new_status_data);
             post_status_data['status_id'] = currentID++;
             this.status_mock_data.push(post_status_data);
+            await this.updateMockDataCookie(this.status_mock_data)
             return this.promiseInput(post_status_data);
         } else {
             return "REAL POST REQUEST";
         }
 
+    } else {
+      throw new Error('did not pass datavalidation');
     }
     return new Error('Failed to post record or record already exists');
   }
@@ -64,6 +83,7 @@ class DataHandler {
             edit_status_data['status_id'] = status_id;
             let recordID = this.findRecordByID(status_id)
             this.status_mock_data[recordID] = edit_status_data;
+            await this.updateMockDataCookie(this.status_mock_data)
             return this.promiseInput(this.status_mock_data[this.findRecordByID(status_id)]);
         } else {
             return "REAL EDIT REQUEST";
@@ -83,6 +103,7 @@ class DataHandler {
           let recordID = this.findRecordByID(status_id);
           const delete_status_data = Object.assign({}, this.status_mock_data[recordID]);
           this.status_mock_data.splice(recordID, 1);
+          await this.updateMockDataCookie(this.status_mock_data)
           return this.promiseInput(delete_status_data);
         } else {
             return "REAL DELETE REQUEST";
@@ -121,6 +142,15 @@ class DataHandler {
   }
 
   // {‘status_tail_number’: ‘87-1502’, ‘aircraft_id’: 5, ‘base_id’: 6, ‘status_is_flyable’: true, ‘status_description’: ‘engine needs repair’, ‘status_priority’: 1}
+//   {
+//     "status_tail_number": "asdfasdf",
+//     "aircraft_id": 0,
+//     "base_id": 0,
+//     "status_is_flyable": "1",
+//     "status_description": "It Works!",
+//     "status_priority": "1"
+// }
+
   verifyNewStatusData (new_status_data) {
     return ( true
         && new_status_data['status_tail_number'] !== undefined
@@ -207,9 +237,9 @@ class DataHandler {
         status_id: 0,
         status_tail_number: 15000000,
         aircraft_id: 0,
-          aircraft_name: "A-10",
+        aircraft_name: "A-10",
         base_id: 0,
-          base_name: "Davis–Monthan AFB",
+        base_name: "Davis–Monthan AFB",
         status_is_flyable: true,
         status_description: "BRRRT",
         status_repair_priority: 3,

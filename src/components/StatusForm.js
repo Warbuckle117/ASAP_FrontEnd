@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import DataHandler from './DataHandler';
 
 const StatusForm = (props) => {
   const [tailNumber, setTailNumber] = useState()
@@ -9,6 +10,8 @@ const StatusForm = (props) => {
   const [flyable, setFlyable] = useState()
   const [description, setDescription] = useState()
   const [priority, setPriority] = useState()
+  const [isLoading, setIsLoading] = useState(true)
+  const [responseData, setResponseData] = useState('')
 
   const tailNumberChange = (event) => {
     const value = event.target.value;
@@ -42,22 +45,64 @@ const StatusForm = (props) => {
     setPriority(value);
   };
 
+  const handleClearForm = () => {
+    props.setItemCallback(-1)
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+
+    //check if it is a new or an edit, if currentItem is -1 it "should" be a new
+    const formData = {
+      status_tail_number: tailNumber,
+      aircraft_id: aircraftID,
+      base_id: baseID,
+      status_is_flyable: true,
+      status_description: description,
+      status_priority: 1};
+      console.log('form data', formData)
+      const dataHandler = new DataHandler();
+      try {
+        dataHandler.postStatus(formData).then((data) => setResponseData(data));
+      } catch (error) {
+        console.error(error);
+      }
+      if (props.currentStatusItem < 0) {
+        let decrementCurrentItem = props.currentStatusItem-1;
+        props.setItemCallback(decrementCurrentItem)
+      } else {
+        props.setItemCallback(-1)
+      }
+  }
+
   useEffect(() => {
-    if (props.currentStatusItem !== -1) {
-    setTailNumber(props.statusData[props.currentStatusItem].status_tail_number)
-    setAircraftName(props.statusData[props.currentStatusItem].aircraft_name)
-    setBase(props.statusData[props.currentStatusItem].base_name)
-    setFlyable(props.statusData[props.currentStatusItem].status_is_flyable)
-    setDescription(props.statusData[props.currentStatusItem].status_description)
-    setPriority(props.statusData[props.currentStatusItem].status_repair_priority)
+    if (props.currentStatusItem > -1) {
+      setTailNumber(props.statusData[props.currentStatusItem].status_tail_number)
+      setAircraftName(props.statusData[props.currentStatusItem].aircraft_name)
+      setAircraftID(props.statusData[props.currentStatusItem].aircraft_id)
+      setBase(props.statusData[props.currentStatusItem].base_name)
+      setBaseID(props.statusData[props.currentStatusItem].base_id)
+      setFlyable(props.statusData[props.currentStatusItem].status_is_flyable)
+      setDescription(props.statusData[props.currentStatusItem].status_description)
+      setPriority(props.statusData[props.currentStatusItem].status_repair_priority)
     } else {
-      //set them all to blank
+      setTailNumber('')
+      setAircraftName('')
+      setAircraftID(0)
+      setBase('')
+      setBaseID(0)
+      setFlyable('')
+      setDescription('')
+      setPriority('')
     }
   }, [props.currentStatusItem])
 
   return (
+
     <div>
-      <form>
+      {responseData ? <div>{JSON.stringify(responseData)}</div> : <div></div>}
+      <form onSubmit={handleSubmit}>
 	      <input  type="text"
                 name="tailNumber"
                 id="tailNumber"
@@ -104,6 +149,9 @@ const StatusForm = (props) => {
                 id="submit"
         />
       </form>
+      <button onClick={handleClearForm}>
+        Clear
+      </button>
     </div>
   )
 }
