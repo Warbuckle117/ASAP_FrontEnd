@@ -58,16 +58,26 @@ const StatusForm = (props) => {
       status_tail_number: tailNumber,
       aircraft_id: aircraftID,
       base_id: baseID,
-      status_is_flyable: flyable,
+      status_is_flyable: true,
       status_description: description,
-      status_priority: priority};
-
-      props.dataHandler.postStatus(formData).then((data) => setResponseData(data));
-    props.setItemCallback(-1)
+      status_priority: 1};
+      console.log('form data', formData)
+      const dataHandler = new DataHandler();
+      try {
+        dataHandler.postStatus(formData).then((data) => setResponseData(data));
+      } catch (error) {
+        console.error(error);
+      }
+      if (props.currentStatusItem < 0) {
+        let decrementCurrentItem = props.currentStatusItem-1;
+        props.setItemCallback(decrementCurrentItem)
+      } else {
+        props.setItemCallback(-1)
+      }
   }
 
   useEffect(() => {
-    if (props.currentStatusItem !== -1) {
+    if (props.currentStatusItem > -1) {
       setTailNumber(props.statusData[props.currentStatusItem].status_tail_number)
       setAircraftName(props.statusData[props.currentStatusItem].aircraft_name)
       setAircraftID(props.statusData[props.currentStatusItem].aircraft_id)
@@ -89,7 +99,9 @@ const StatusForm = (props) => {
   }, [props.currentStatusItem])
 
   return (
+
     <div>
+      {responseData ? <div>{JSON.stringify(responseData)}</div> : <div></div>}
       <form onSubmit={handleSubmit}>
 	      <input  type="text"
                 name="tailNumber"

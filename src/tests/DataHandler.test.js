@@ -59,18 +59,29 @@ describe('The DataHandler Utility Class', () => {
     //setup
     const dataHandler = new DataHandler();
 
-    //execute
-    const results = await dataHandler.getStatus();
-
-    expect(results).toHaveLength(5);
-
     const postData = {status_tail_number: '87-1502', aircraft_id: 5, base_id: 6, status_is_flyable: true, status_description: 'engine needs repair', status_priority: 1};
 
-    const results2 = await dataHandler.postStatus(postData);
-    expect(results2.status_id).toBeDefined();
+    //execute
+    await dataHandler.getStatus()
+    .then((res1) => {
+      expect(res1).toHaveLength(5)
+    })
+    .then(() => dataHandler.postStatus(postData))
+    .then((res2) => {
+      expect(res2.status_id).toBeDefined();
+    })
+    .then(() => dataHandler.getStatus())
+    .then((res3) => {
+      expect(res3).toHaveLength(6);
+    })
 
-    const results3 = await dataHandler.getStatus();
-    expect(results3).toHaveLength(6);
+
+
+    // const results2 = await dataHandler.postStatus(postData);
+    // expect(results2.status_id).toBeDefined();
+
+    // const results3 = await dataHandler.getStatus();
+    // expect(results3).toHaveLength(6);
   });
 
   it('Provides Mock Capability For patchStatus EndPoint', async () => {
@@ -95,7 +106,7 @@ describe('The DataHandler Utility Class', () => {
 
     const dataHandler = new DataHandler();
     const results = await dataHandler.getStatus();
-    expect(results).toHaveLength(5);
+    expect(results).toHaveLength(6);
 
     await dataHandler.deleteStatus(0)
     .then((res1) => {
@@ -103,7 +114,7 @@ describe('The DataHandler Utility Class', () => {
     })
     .then(() => dataHandler.getStatus())
     .then((res2) => {
-      expect(res2).toHaveLength(4);
+      expect(res2).toHaveLength(5);
     })
     .then(() => dataHandler.deleteStatus(1))
     .then((res3) => {
@@ -111,7 +122,7 @@ describe('The DataHandler Utility Class', () => {
     })
     .then(() => dataHandler.getStatus())
     .then((res4) => {
-      expect(res4).toHaveLength(3);
+      expect(res4).toHaveLength(4);
     })
  });
 })

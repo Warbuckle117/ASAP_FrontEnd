@@ -14,7 +14,6 @@ module.exports = {
     'plugin:jest/recommended',
     'plugin:jest/style',
     'plugin:react/recommended',
-    'plugin:prettier/recommended',
   ],
   parserOptions: {
     ecmaVersion: 11,

@@ -7,7 +7,6 @@ import './App.css';
 
 const App = () => {
   const [statusData, setStatusData] = useState([])
-  const [globalDataHandler, setglobalDataHandler] = useState(new DataHandler())
   const [aircraftData, setAircraftData] = useState([])
   const [baseData, setBaseData] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -17,7 +16,7 @@ const App = () => {
   //useEffect for aircraft and bases
   useEffect(() => {
     setIsLoading(true);
-    const dataHandler = globalDataHandler;
+    const dataHandler = new DataHandler();
     dataHandler.getAircraft().then((data) => setAircraftData(data)).then(() => setIsLoading(false));
     dataHandler.getBases().then((data) => setBaseData(data)).then(() => setIsLoading(false));
   }, [])
@@ -25,7 +24,7 @@ const App = () => {
   //useEffect for status list depends on currentStatusItem
   useEffect(() => {
     setIsLoading(true);
-    const dataHandler = globalDataHandler;
+    const dataHandler = new DataHandler();
     dataHandler.getStatus().then((data) => setStatusData(data)).then(() => setIsLoading(false));
   }, [currentStatusItem])
 
@@ -33,7 +32,7 @@ const App = () => {
     <div className='App'>
       <h2>A.S.A.P.</h2><br/>
       <h3>Aircraft Status And Position</h3>
-      <StatusForm dataHandler={globalDataHandler} currentStatusItem={currentStatusItem} statusData={statusData} aircraftData={aircraftData} baseData={baseData} setItemCallback={(item) => setCurrentStatusItem(item)} />
+      <StatusForm currentStatusItem={currentStatusItem} statusData={statusData} aircraftData={aircraftData} baseData={baseData} setItemCallback={(item) => setCurrentStatusItem(item)} />
       <Switch >
         <Route exact path='/' >
           <StatusList statusData={statusData} aircraftData={aircraftData} baseData={baseData} setItemCallback={(item) => setCurrentStatusItem(item)}/>
