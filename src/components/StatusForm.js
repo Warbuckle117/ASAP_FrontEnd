@@ -33,12 +33,27 @@ const StatusForm = (props) => {
     const value = event.target.value;
     //make sure to set aircraft id as well
     setAircraftID(parseInt(value));
+    //use prop bases to update base name
+    setAircraftName(() => {
+      for (let i = 0; i < props.aircraftData.length; i++) {
+        if (props.aircraftData[i].aircraft_id === parseInt(value)) {
+          return props.aircraftData[i].aircraft_name;
+        }
+      }
+    });
   };
 
   const baseChange = (event) => {
     const value = event.target.value;
     //make sure to set base id as well
     setBaseID(parseInt(value));
+    setBase(() => {
+      for (let i = 0; i < props.baseData.length; i++) {
+        if (props.baseData[i].base_id === parseInt(value)) {
+          return props.baseData[i].base_name;
+        }
+      }
+    });
   };
 
   const flyableChange = (event) => {
@@ -116,7 +131,9 @@ const StatusForm = (props) => {
     const formData = {
       status_tail_number: tailNumber,
       aircraft_id: aircraftID,
+      aircraft_name: aircraftName,
       base_id: baseID,
+      base_name: base,
       status_is_flyable: flyable,
       status_description: description,
       status_priority: priority};
@@ -178,7 +195,7 @@ const StatusForm = (props) => {
                 onChange={aircraftNameChange}>
             <option value = "" selected></option>
             {props.aircraftData && props.aircraftData.map((aircraft) => {
-              return <option value={aircraft.aircraft_id}>{`${aircraft.aircraft_type}`}</option>
+              return <option value={aircraft.aircraft_id}>{`${aircraft.aircraft_name}`}</option>
             })}
          </select>
         <select name = "baseName"

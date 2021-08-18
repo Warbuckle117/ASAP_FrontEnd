@@ -210,51 +210,43 @@ class DataHandler {
   getMockAircraftData() {
     return [
       {
-        aircraft_id: 0,
-        aircraft_type: "A-10",
+          "aircraft_id": 1,
+          "aircraft_name": "c-17"
       },
       {
-        aircraft_id: 1,
-        aircraft_type: "C-17",
+          "aircraft_id": 2,
+          "aircraft_name": "f-16"
       },
       {
-        aircraft_id: 2,
-        aircraft_type: "F-16",
+          "aircraft_id": 3,
+          "aircraft_name": "kc-135"
       },
       {
-        aircraft_id: 3,
-        aircraft_type: "KC-135",
-      },
-      {
-        aircraft_id: 4,
-        aircraft_type: "B-52",
-      },
-    ];
+          "aircraft_id": 4,
+          "aircraft_name": "b-52"
+      }
+  ];
   }
 
   getMockBaseData() {
     return [
       {
-        base_id: 0,
-        base_name: "Davis–Monthan AFB",
+          "base_id": 1,
+          "base_name": "Pope AFB"
       },
       {
-        base_id: 1,
-        base_name: "Pope AFB",
+          "base_id": 2,
+          "base_name": "JB Charleston"
       },
       {
-        base_id: 2,
-        base_name: "JB Charleston",
+          "base_id": 3,
+          "base_name": "Travis AFB"
       },
       {
-        base_id: 3,
-        base_name: "Travis AFB",
-      },
-      {
-        base_id: 4,
-        base_name: "Dover AFB",
-      },
-    ];
+          "base_id": 4,
+          "base_name": "Dover AFB"
+      }
+  ];
   }
 
   getMockStatusData() {
