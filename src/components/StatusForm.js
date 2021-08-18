@@ -17,6 +17,7 @@ const StatusForm = (props) => {
   const [priority, setPriority] = useState()
   const [isLoading, setIsLoading] = useState(true)
   const [responseData, setResponseData] = useState('')
+  const [isDisabled, setIsDisabled] = useState(false)
 
   const FLYABLE_BOOL = (isFlyable) => {
     if (isFlyable === '')
@@ -160,8 +161,6 @@ const StatusForm = (props) => {
 
   useEffect(() => {
     if (props.currentStatusItem > -1) {
-
-
       setStatusID(props.statusData[props.currentArrayItem].status_id)
       setTailNumber(props.statusData[props.currentArrayItem].status_tail_number)
       setAircraftName(props.statusData[props.currentArrayItem].aircraft_name)
@@ -171,6 +170,7 @@ const StatusForm = (props) => {
       setFlyable(props.statusData[props.currentArrayItem].status_is_flyable)
       setDescription(props.statusData[props.currentArrayItem].status_description)
       setPriority(props.statusData[props.currentArrayItem].status_priority)
+      setIsDisabled(true)
     } else {
       setStatusID('')
       setTailNumber('')
@@ -181,6 +181,7 @@ const StatusForm = (props) => {
       setFlyable('')
       setDescription('')
       setPriority(0)
+      setIsDisabled(false)
     }
   }, [props.currentStatusItem])
 
@@ -199,11 +200,11 @@ const StatusForm = (props) => {
   <div className="row">
     <div className="col">
     <label className="form-label">Tail Number</label>
-    <input className="form-control" type="text" name="tailNumber" id="tailNumber" value={tailNumber} onChange={tailNumberChange} placeholder="Tail Number" />
+    <input className="form-control" type="text" name="tailNumber" id="tailNumber" value={tailNumber} onChange={tailNumberChange} placeholder="Tail Number" disabled={isDisabled} />
     </div>
     <div className="col">
     <label className="form-label">Aircraft Type</label>
-    <select className="form-select" name="aircraftName" value={aircraftID} onChange={aircraftNameChange}>
+    <select className="form-select" name="aircraftName" value={aircraftID} onChange={aircraftNameChange} disabled={isDisabled}>
       <option value="" selected></option>
       {props.aircraftData &&
         props.aircraftData.map((aircraft) => {
@@ -251,10 +252,10 @@ const StatusForm = (props) => {
     </div>
   </div>
   <div className="row m-1">
-    <div className="col"><button className="btn btn-primary" onClick={handleSubmit}>Submit</button></div>
-    <div className="col"><button className="btn btn-warning" onClick={handleModifyForm}>Modify</button></div>
-    <div className="col"><button className="btn btn-danger" onClick={handleDeleteForm}>Delete</button></div>
-    <div className="col"><button className="btn btn-info" onClick={handleClearForm}>Clear</button></div>
+    <div className="col d-grid gap-2"><button className="btn btn-primary" disabled={isDisabled} onClick={handleSubmit}>Create</button></div>
+    <div className="col d-grid gap-2"><button className="btn btn-warning" disabled={!isDisabled} onClick={handleModifyForm}>Modify</button></div>
+    <div className="col d-grid gap-2"><button className="btn btn-danger" disabled={!isDisabled} onClick={handleDeleteForm}>Delete</button></div>
+    <div className="col d-grid gap-2"><button className="btn btn-info" onClick={handleClearForm}>Clear</button></div>
   </div>
 </div>
   )
