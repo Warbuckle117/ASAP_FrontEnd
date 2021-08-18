@@ -136,13 +136,11 @@ class DataHandler {
       const edit_status_data = Object.assign({}, new_status_data);
       try {
         const response = await fetch(`${this.apiBase}/status/${status_id}`, {
-          method: "patch",
-          credentials: "omit", // include, *same-origin, omit
+          method: "PATCH",
           headers: {
             "Content-Type": "application/json",
             // 'Content-Type': 'application/x-www-form-urlencoded',
           },
-          mode: "cors",
           body: JSON.stringify(edit_status_data),
         });
         return await response.json();
