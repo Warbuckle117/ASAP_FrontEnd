@@ -81,7 +81,7 @@ const StatusForm = (props) => {
 
     //check if it is a new or an edit, if currentItem is -1 it "should" be a new
     const formData = {
-      status_id: statusID,
+      status_id: props.currentStatusItem,
       status_tail_number: tailNumber,
       aircraft_id: aircraftID,
       aircraft_name: aircraftName,
@@ -93,7 +93,7 @@ const StatusForm = (props) => {
       console.log('form data', formData)
       const dataHandler = new DataHandler();
       try {
-        dataHandler.editStatus(formData, statusID).then((data) => setResponseData(data));
+        dataHandler.editStatus(formData, props.currentStatusItem).then((data) => setResponseData(data));
       } catch (error) {
         console.error(error);
       }
