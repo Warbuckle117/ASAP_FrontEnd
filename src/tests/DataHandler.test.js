@@ -53,7 +53,7 @@ describe('The DataHandler Utility Class', () => {
     // setup
     const dataHandler = new DataHandler();
 
-    const postData = {status_tail_number: '87-1502', aircraft_id: 5, base_id: 6, status_is_flyable: true, status_description: 'engine needs repair', status_priority: 1};
+    const postData = {status_tail_number: '87001502', aircraft_id: 5, base_id: 6, status_is_flyable: true, status_description: 'engine needs repair', status_priority: 1};
 
     // execute
     await dataHandler.getStatus()
@@ -81,13 +81,13 @@ describe('The DataHandler Utility Class', () => {
   it('Provides Mock Capability For patchStatus EndPoint', async () => {
     const dataHandler = new DataHandler();
     const results = await dataHandler.getStatus();
-    expect(results[0].base_id).toEqual(0);
+    expect(results[0].base_id).toEqual(2);
 
     const patchData = {status_tail_number: '15000000', aircraft_id: 0, base_id: 1, status_is_flyable: false, status_description: 'good to go', status_priority: 3};
 
-    await dataHandler.editStatus(patchData, 0)
+    await dataHandler.editStatus(patchData, 1)
       .then((res1) => {
-        expect(res1.status_id).toEqual(0);
+        expect(res1.status_id).toEqual(1);
       })
       .then(() => dataHandler.getStatus())
       .then((res2) => {
@@ -100,17 +100,17 @@ describe('The DataHandler Utility Class', () => {
     const results = await dataHandler.getStatus();
     expect(results).toHaveLength(6);
 
-    await dataHandler.deleteStatus(0)
+    await dataHandler.deleteStatus(1)
       .then((res1) => {
-        expect(res1.status_id).toEqual(0);
+        expect(res1.status_id).toEqual(1);
       })
       .then(() => dataHandler.getStatus())
       .then((res2) => {
         expect(res2).toHaveLength(5);
       })
-      .then(() => dataHandler.deleteStatus(1))
+      .then(() => dataHandler.deleteStatus(2))
       .then((res3) => {
-        expect(res3.status_id).toEqual(1);
+        expect(res3.status_id).toEqual(2);
       })
       .then(() => dataHandler.getStatus())
       .then((res4) => {
