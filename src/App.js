@@ -12,6 +12,7 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true)
   //-1 on current status item means no data is loaded to edit form
   const [currentStatusItem, setCurrentStatusItem] = useState(-1)
+  const [currentArrayItem, setCurrentArrayItem] = useState(-1)
 
   //useEffect for aircraft and bases
   useEffect(() => {
@@ -32,12 +33,12 @@ const App = () => {
     <div className='App'>
       <h2>A.S.A.P.</h2><br/>
       <h3>Aircraft Status And Position</h3>
-      <StatusForm currentStatusItem={currentStatusItem} statusData={statusData} aircraftData={aircraftData} baseData={baseData} setItemCallback={(item) => setCurrentStatusItem(item)} />
+      <StatusForm currentStatusItem={currentStatusItem} currentArrayItem={currentArrayItem} statusData={statusData} aircraftData={aircraftData} baseData={baseData} setItemCallback={(item) => setCurrentStatusItem(item)} />
       <Switch >
         <Route exact path='/' >
-          <StatusList statusData={statusData} aircraftData={aircraftData} baseData={baseData} setItemCallback={(item) => setCurrentStatusItem(item)}/>
+          <StatusList statusData={statusData} aircraftData={aircraftData} baseData={baseData} setItemCallback={(item) => setCurrentStatusItem(item)} setArrayItemCallback={(item) => setCurrentArrayItem(item)}/>
         </Route>
-      </Switch>
+      </Switch>r
 
     </div>
   );
