@@ -20,7 +20,7 @@ const StatusListItem = (props) => {
   }, [props.statusItem]);
 
   return (
-    <article className="row mt-1" onClick={handleItemClick}>
+    <article id={props.id} className="row mt-1" onClick={handleItemClick}>
       <div className="card col">
         <div className="card-header row">
           <div className="col">
