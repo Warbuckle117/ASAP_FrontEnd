@@ -26,6 +26,20 @@ const StatusForm = (props) => {
     setTailNumber(value);
   };
 
+  useEffect(() => {
+    if (responseData !== undefined) {
+    if (responseData['message'] !== undefined) {
+      console.log('got to message')
+        if (props.currentStatusItem < 0) {
+          let decrementCurrentItem = props.currentStatusItem - 1;
+          props.setItemCallback(decrementCurrentItem)
+        } else {
+          props.setItemCallback(-1)
+        }
+    }
+  }
+  },[responseData])
+
   const aircraftNameChange = (event) => {
     const value = event.target.value;
     // make sure to set aircraft id as well
@@ -69,7 +83,13 @@ const StatusForm = (props) => {
   };
 
   const handleClearForm = () => {
-    props.setItemCallback(-1)
+    if (props.currentStatusItem < 0) {
+      let decrementCurrentItem = props.currentStatusItem - 1;
+      props.setItemCallback(decrementCurrentItem)
+    } else {
+      props.setItemCallback(-1)
+    }
+    setResponseData('')
   };
 
   const handleModifyForm = () => {
@@ -93,12 +113,6 @@ const StatusForm = (props) => {
       dataHandler.editStatus(formData, props.currentStatusItem).then((data) => setResponseData(data));
     } catch (error) {
       console.error(error);
-    }
-    if (props.currentStatusItem < 0) {
-      let decrementCurrentItem = props.currentStatusItem - 1;
-      props.setItemCallback(decrementCurrentItem)
-    } else {
-      props.setItemCallback(-1)
     }
   };
 
@@ -130,10 +144,10 @@ const StatusForm = (props) => {
   const displayResonseData = () => {
     if (responseData) {
       if (responseData['message'] !== undefined) {
-        return <card className="text-dark bg-success">{responseData['message']}</card>
+        return <div className="d-grid gap-2"><button className="btn btn-success" onClick={handleClearForm}>{responseData['message']}</button></div>;
       } else
       if (responseData['error'] !== undefined) {
-        return <card className="text-white bg-danger">{responseData['error']}</card>
+        return <div className="d-grid gap-2"><button className="btn bg-danger" onClick={handleClearForm}>{responseData['error']}</button></div>;
       } else
       {
         return <div>{JSON.stringify(responseData)}</div>
@@ -165,13 +179,9 @@ const StatusForm = (props) => {
     } catch (error) {
       console.error(error);
     }
-    if (props.currentStatusItem < 0) {
-      let decrementCurrentItem = props.currentStatusItem - 1;
-      props.setItemCallback(decrementCurrentItem)
-    } else {
-      props.setItemCallback(-1)
-    }
   };
+
+
 
   useEffect(() => {
     if (props.currentStatusItem > -1) {
@@ -197,7 +207,6 @@ const StatusForm = (props) => {
       setDescription('');
       setPriority(0);
       setIsDisabled(false);
-      setResponseData('')
     }
   }, [props.currentStatusItem]);
 
