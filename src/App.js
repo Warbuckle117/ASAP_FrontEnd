@@ -34,8 +34,7 @@ const App = () => {
     <main className='container'>
       <section className='row justify-content-center'>
         <div className='col-8 text-center'>
-          <img src={asap} className="img-fluid" alt='ASAP'/>
-          <h1>Aircraft Status And Position</h1>
+          <img src={asap} className="img-fluid p-1" alt='ASAP'/><br/>
         </div>
       </section>
       <section className='row'>
