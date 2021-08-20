@@ -15,6 +15,57 @@ const StatusListItem = (props) => {
     return isFlyable ? 'Flyable' : 'Non-Flyable';
   }
 
+  const displayPriorityCol = () => {
+
+    switch (props.statusItem.status_priority) {
+      case 1:
+      return (
+        <div className="col bg-danger">
+          {PRIORITY_LIST_NUM[props.statusItem.status_priority] + " Priority"}
+        </div>)
+      case 2:
+        return (
+          <div className="col bg-warning">
+            {PRIORITY_LIST_NUM[props.statusItem.status_priority] + " Priority"}
+          </div>)
+          case 3:
+          return (
+            <div className="col bg-success">
+              {PRIORITY_LIST_NUM[props.statusItem.status_priority] + " Priority"}
+            </div>)
+            default:
+              return (
+                <div className="col">
+                  {PRIORITY_LIST_NUM[props.statusItem.status_priority] + " Priority"}
+                </div>)
+    }
+  }
+
+  const displayStatusCol = () => {
+    switch (props.statusItem.status_is_flyable) {
+      case true:
+    return (
+      <div className="col bg-success">
+        {FLYABLE_BOOL(props.statusItem.status_is_flyable) + " Status"}
+      </div>
+    )
+      case false:
+        return (
+          <div className="col bg-danger">
+            {FLYABLE_BOOL(props.statusItem.status_is_flyable) + " Status"}
+          </div>
+        )
+        default:
+        return (
+          <div className="col">
+            {FLYABLE_BOOL(props.statusItem.status_is_flyable) + " Status"}
+          </div>
+        )
+    }
+  }
+
+
+
   useEffect(() => {
 
   }, [props.statusItem]);
@@ -37,14 +88,10 @@ const StatusListItem = (props) => {
           </div>
           <div className="col-4">
             <div className="row">
-              <div className="col">
-                {PRIORITY_LIST_NUM[props.statusItem.status_priority] + " Priority"}
-              </div>
+            {displayPriorityCol()}
             </div>
             <div className="row">
-              <div className="col">
-                {FLYABLE_BOOL(props.statusItem.status_is_flyable) + " Status"}
-              </div>
+            {displayStatusCol()}
             </div>
           </div>
         </div>

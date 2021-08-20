@@ -254,17 +254,17 @@ const StatusForm = (props) => {
           <label className="form-label">Maintenance Status</label>
           <select className="form-select" name="flyable" id="flyable" value={FLYABLE_BOOL(flyable)} onChange={flyableChange}>
             <option value="" selected></option>
-            <option value="Flyable">Flyable</option>
-            <option value="Non-Flyable">Non-Flyable</option>
+            <option className="bg-success" value="Flyable">Flyable</option>
+            <option className="bg-danger" value="Non-Flyable">Non-Flyable</option>
           </select>
         </div>
         <div className="col">
           <label className="form-label">Maintenance Priority</label>
           <select className="form-select" name="priority" id="priority" value={PRIORITY_LIST_NUM[priority]} onChange={priorityChange}>
             <option value="" selected></option>
-            <option value="High">High</option>
-            <option value="Medium">Medium</option>
-            <option value="Low">Low</option>
+            <option className="bg-success" value="High">High</option>
+            <option className="bg-warning" value="Medium">Medium</option>
+            <option className="bg-danger" value="Low">Low</option>
           </select>
         </div>
       </div>
