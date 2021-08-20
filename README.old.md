@@ -1,2 +1,0 @@
-# ASAP_FrontEnd
-AircraftStatusAndPosition FrontEnd

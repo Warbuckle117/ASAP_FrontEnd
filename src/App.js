@@ -7,15 +7,17 @@ import asap from './asap.png';
 import './App.css';
 
 const App = () => {
-  const [statusData, setStatusData] = useState([])
-  const [aircraftData, setAircraftData] = useState([])
-  const [baseData, setBaseData] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  //-1 on current status item means no data is loaded to edit form
-  const [currentStatusItem, setCurrentStatusItem] = useState(-1)
-  const [currentArrayItem, setCurrentArrayItem] = useState(-1)
+  const [statusData, setStatusData] = useState([]);
+  const [aircraftData, setAircraftData] = useState([]);
+  const [baseData, setBaseData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  // -1 on current status item means no data is loaded to edit form
+  const [currentStatusItem, setCurrentStatusItem] = useState(-1);
+  const [currentArrayItem, setCurrentArrayItem] = useState(-1);
+  const [targetProp, setTargetProp] = useState('base_name');
+  const [targetValue, setTargetValue] = useState('JB Charleston');
 
-  //useEffect for aircraft and bases
+  // useEffect for aircraft and bases
   useEffect(() => {
     setIsLoading(true);
     const dataHandler = new DataHandler();
@@ -23,12 +25,12 @@ const App = () => {
     dataHandler.getBases().then((data) => setBaseData(data)).then(() => setIsLoading(false));
   }, [])
 
-  //useEffect for status list depends on currentStatusItem
+  // useEffect for status list depends on currentStatusItem
   useEffect(() => {
     setIsLoading(true);
     const dataHandler = new DataHandler();
     dataHandler.getStatus().then((data) => setStatusData(data)).then(() => setIsLoading(false));
-  }, [currentStatusItem])
+  }, [currentStatusItem]);
 
   return (
     <main className='container'>
@@ -38,12 +40,12 @@ const App = () => {
         </div>
       </section>
       <section className='row'>
-          <StatusForm currentStatusItem={currentStatusItem} currentArrayItem={currentArrayItem} statusData={statusData} aircraftData={aircraftData} baseData={baseData} setItemCallback={(item) => setCurrentStatusItem(item)} />
+        <StatusForm currentStatusItem={currentStatusItem} currentArrayItem={currentArrayItem} statusData={statusData} aircraftData={aircraftData} baseData={baseData} setItemCallback={(item) => setCurrentStatusItem(item)} />
       </section>
       <section className='row'>
         <Switch >
           <Route exact path='/' >
-            <StatusList statusData={statusData} aircraftData={aircraftData} baseData={baseData} setItemCallback={(item) => setCurrentStatusItem(item)} setArrayItemCallback={(item) => setCurrentArrayItem(item)}/>
+            <StatusList targetProp={targetProp} targetValue={targetValue} statusData={statusData} aircraftData={aircraftData} baseData={baseData} setItemCallback={(item) => setCurrentStatusItem(item)} setArrayItemCallback={(item) => setCurrentArrayItem(item)}/>
           </Route>
         </Switch>
       </section>

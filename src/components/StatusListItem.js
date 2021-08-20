@@ -19,7 +19,8 @@ const StatusListItem = (props) => {
 
   }, [props.statusItem]);
 
-  return (
+  return props.shouldRender ?
+  (
     <article id={props.id} className="row mt-1" onClick={handleItemClick}>
       <div className="card col">
         <div className="card-header row">
@@ -31,7 +32,8 @@ const StatusListItem = (props) => {
         </div>
         <div className="row">
           <div className="col-8">
-            Description: <em>{props.statusItem.status_description}</em>
+            <span>Description: <em>{props.statusItem.status_description}</em></span><br/>
+            <span>Last Updated: {props.statusItem.updated_at.slice(0,10)}</span>
           </div>
           <div className="col-4">
             <div className="row">
@@ -48,7 +50,8 @@ const StatusListItem = (props) => {
         </div>
       </div>
     </article>
-  )
+  ) :
+  null;
 }
 
 export default StatusListItem;
